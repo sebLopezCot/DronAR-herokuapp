@@ -1,6 +1,6 @@
 'use strict'; // puts us in strict mode (js in hard mode)
-let mongo = require('mongodb').MongoClient;
-let uri = "mongodb://dronar:dronar123@ds046549.mlab.com:46549/dronar";
+// let mongo = require('mongodb').MongoClient;
+// let uri = "mongodb://dronar:dronar123@ds046549.mlab.com:46549/dronar";
 
 /* This sets up a pure socket-io server.
  * Later in the guide we upgrade to a full
@@ -35,66 +35,51 @@ let server = app.listen(port, () => {
 
 let io = require('socket.io')(server);
 
-let currentViews = [
-  {
-    drone: "drone_one",
-    lat: "[40.7127837]",
-    long_: "[-74.00594130000002]",
-    temp: "60.5",
-    status: "good",
-    altitude: "100",
-    eta: "130",
-    timestamp: "1474174199014"
-}
-];
+let drones = {
+  "drone_one": {
+    "lat": "40.4406",
+    "long_": "-79.9959",
+    "temp": "60.5",
+    "status": "good",
+    "altitude": "100",
+    "eta": "0",
+    "timestamp": "1474188834",
+    "endLat": "40.4406",
+    "endLong": "-77.00594130000002"
+  },
 
-io.on('connection', (socket) => {
-  for(var i = 0; i < currentViews.length; i++) {
-    socket.emit('CHANGE_VIEW', currentViews[i]);
-    console.log("connected");
+  "drone_two" : {
+    "lat": "42.365843",
+    "long_": " -71.104485",
+    "temp": "82.5",
+    "status": "good",
+    "altitude": "15",
+    "eta": "5",
+    "timestamp": "1474167534",
+    "endLat": "42.374445",
+    "endLong": "-71.117250"
+  },
+
+  "drone_three" : {
+    "lat": "39.8781",
+    "long_": "-89.6298",
+    "temp": "60.5",
+    "status": "good",
+    "altitude": "300",
+    "eta": "60",
+    "timestamp": "1474167234",
+    "startLat": "41.8781",
+    "startLong": "-87.6298",
+    "endLat": "39.8781",
+    "endLong": "-89.6298"
   }
 
-  socket.on('SEL', (data) => {
-    var times = [];
-    var lat = [];
-    var long_ = [];
-    var drone = [];
-    var altitude=[];
-    var eta=[];
-    var temp = [];
-    var statusStr = [];
-    var startLat=[];
-    var startLong=[];
-    var endLat=[];
-    var endLong=[];
-    io.emit('REMOVE_VIEW', currentViews[0]);
-          console.log(data.choice);
-    mongo.connect(uri, function (err, db) {
+};
 
-      var collection = db.collection('location')
-      collection.find({"drone": data.choice}).sort({ timestamp : 1 }).limit(10).toArray((err, array) => {
-      if(err) return console.error(err);
-        for(let i = array.length - 1; i >= 0; i--){
-        times += array[i].timestamp;
-        lat += array[i].lat;
-        long_ += array[i].long_;
-        drone += array[i].drone;
-        altitude += array[i].altitude;
-        eta += array[i].eta;
-        temp += array[i].temp;
-        status += array[i].status;
-        startLat += array[i].startLat;
-        startLong += array[i].startLong;
-        endLat += array[i].endLat;
-        endLong += array[i].endLong;
-        //io.emit something
-      }
-    });
-  });
-    currentViews.shift();
-    currentViews.push({time: times[0],drone: data.choice, lat: lat, long_: long_,
-      altitude:altitude[0], temp:temp[0], eta: eta[0], endLat:endLat[0], endLong:endLong[0],
-    startLat:startLat[0], startLong:startLong[0]});
-    io.emit('CHANGE_VIEW', currentViews[currentViews.length - 1]); // broadcast the message everywhere
+io.on('connection', (socket) => {
+
+  socket.on('SEL', (data) => {
+    io.emit('CHANGE_VIEW', drones[data.choice]); // broadcast the message everywhere
+    console.log("CHANGING TO " + data.choice);
   });
 });
