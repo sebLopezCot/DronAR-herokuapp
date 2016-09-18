@@ -2,7 +2,6 @@
 var socket = io('http://dronar-app.herokuapp.com');
 
 socket.on('ADD_VIEW', (data) => {
-    $("#current").html(data.type);
     $("#x").attr("placeholder","X position = " + data.x);
     $("#y").attr("placeholder","Y position = " + data.y)
     $("#z").attr("placeholder","Z position = " + data.z)
@@ -32,4 +31,4 @@ function updateSelection(choice, x, y, z, zoom, rotate, equation) {
 
 function parseChoice(choice) {
   return choice;
-}     
+}
