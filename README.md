@@ -1,2 +1,0 @@
-# DronAR-herokuapp
-DronAR-herokuapp
