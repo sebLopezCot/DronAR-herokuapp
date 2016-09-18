@@ -7,5 +7,25 @@
     "minimist": "^1.2.0",
     "node-uuid": "1.4.7",
     "socket.io": "^1.4.4"
-  }
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "dronar-herokuapp",
+  "version": "1.0.0",
+  "description": "idk",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebLopezCot/DronAR-herokuapp.git"
+  },
+  "keywords": [
+    "kek"
+  ],
+  "author": "Sebas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sebLopezCot/DronAR-herokuapp/issues"
+  },
+  "homepage": "https://github.com/sebLopezCot/DronAR-herokuapp#readme"
 }
