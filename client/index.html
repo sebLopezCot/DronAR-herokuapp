@@ -21,12 +21,10 @@
                 <div class="card-panel" style="margin-top: 75px">
                     <div class="input-field">
                         <select id="dropdown">
-                            <option value="" disabled selected>Choose the object you wish to load</option>
-                            <option value="skull">MRI Skull</option>
-                            <option value="glucose">Chemistry Molecule</option>
-                            <option value="graph">Custom Graph</option>
-                            <option value="physics">Physics Simulation 1</option>
-                            <option value="physics2">Physics Simulation 2</option>
+                            <option value="" disabled selected>Choose the drone you wish to see</option>
+                            <option value="drone_1">Drone 1</option>
+                            <option value="drone_2">Drone 2</option>
+                            <option value="drone_3">Drone 3</option>
                         </select>
                         <label>Object Select</label>
                     </div>
@@ -34,7 +32,7 @@
                         <input placeholder="Enter an equation" id="eq" type="text">
                     </div>
                     <br><br><br>
-                    <p>Current Model Loaded: <b id="current"></b></p>
+                    <p>Current Drone Loaded: <b id="current"></b></p>
                     <div class="input-field" id="wrap" style="margin-bottom: 1px">
                     <div class="col s12 center-align">
                         <div class="col s4 center-align">
@@ -95,7 +93,7 @@
             var equation = $('#eq').val()
             if(x || y || z || zoom || rotate || equation) {
                 console.log("yes");
-                updateSelection(v1, 
+                updateSelection(v1,
                     ((x >= 1) ? x : 0),
                     ((y >= 1) ? y : 0),
                     ((z >= 1) ? z : 0),
@@ -103,7 +101,7 @@
                     ((rotate >= 1) ? rotate : 0),
                     ((equation !== '') ? equation : 'y=x')
 
-                    
+
             )} else if (!v2) {
                 sendSelection(v1);
                 console.log("sent v1");

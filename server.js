@@ -36,13 +36,22 @@ let server = app.listen(port, () => {
 let io = require('socket.io')(server);
 
 let currentViews = [
-  { type: 'skull',
-    x: 0, y: 0,z:0, rotate: 0, zoom: 1, rotate_rate: 0}
+  {
+    drone: "drone_one",
+    lat: "[40.7127837]",
+    long_: "[-74.00594130000002]",
+    temp: "60.5",
+    status: "good",
+    altitude: "100",
+    eta: "130",
+    timestamp: "1474174199014"
+}
 ];
 
 io.on('connection', (socket) => {
   for(var i = 0; i < currentViews.length; i++) {
     socket.emit('ADD_VIEW', currentViews[i]);
+    console.log("connected");
   }
 
   socket.on('SEL', (data) => {
@@ -52,11 +61,14 @@ io.on('connection', (socket) => {
     var drone = [];
     var altitude=[];
     var eta=[];
+    var temp = [];
+    var statusStr = [];
     io.emit('REMOVE_VIEW', currentViews[0]);
+          console.log(data.choice);
     mongo.connect(uri, function (err, db) {
 
       var collection = db.collection('location')
-      collection.find().sort({ timestamp : -1 }).limit(10).toArray((err, array) => {
+      collection.find({"drone": data.choice}).sort({ timestamp : -1 }).limit(10).toArray((err, array) => {
       if(err) return console.error(err);
         for(let i = array.length - 1; i >= 0; i--){
         times += array[i].timestamp;
@@ -64,13 +76,16 @@ io.on('connection', (socket) => {
         long_ += array[i].long_;
         drone += array[i].drone;
         altitude += array[i].altitude;
-        eta += array[i].eta; 
+        eta += array[i].eta;
+        temp += array[i].temp;
+        status += array[i].status;
         //io.emit something
       }
     });
   });
     currentViews.shift();
-    currentViews.push({rotate:0,rotate_rate:0,type: data.choice, x: 0, y: 0, z:0, zoom:1});
+    currentViews.push({time: times[0],drone: data.choice, lat: lat, long_: long_,
+      altitude:altitude[0], temp:temp[0], eta: eta[0]});
     io.emit('ADD_VIEW', currentViews[currentViews.length - 1]); // broadcast the message everywhere
   });
 });
