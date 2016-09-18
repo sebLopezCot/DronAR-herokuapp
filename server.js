@@ -50,7 +50,7 @@ let currentViews = [
 
 io.on('connection', (socket) => {
   for(var i = 0; i < currentViews.length; i++) {
-    socket.emit('ADD_VIEW', currentViews[i]);
+    socket.emit('CHANGE_VIEW', currentViews[i]);
     console.log("connected");
   }
 
@@ -63,12 +63,16 @@ io.on('connection', (socket) => {
     var eta=[];
     var temp = [];
     var statusStr = [];
+    var startLat=[];
+    var startLong=[];
+    var endLat=[];
+    var endLong=[];
     io.emit('REMOVE_VIEW', currentViews[0]);
           console.log(data.choice);
     mongo.connect(uri, function (err, db) {
 
       var collection = db.collection('location')
-      collection.find({"drone": data.choice}).sort({ timestamp : -1 }).limit(10).toArray((err, array) => {
+      collection.find({"drone": data.choice}).sort({ timestamp : 1 }).limit(10).toArray((err, array) => {
       if(err) return console.error(err);
         for(let i = array.length - 1; i >= 0; i--){
         times += array[i].timestamp;
@@ -79,13 +83,18 @@ io.on('connection', (socket) => {
         eta += array[i].eta;
         temp += array[i].temp;
         status += array[i].status;
+        startLat += array[i].startLat;
+        startLong += array[i].startLong;
+        endLat += array[i].endLat;
+        endLong += array[i].endLong;
         //io.emit something
       }
     });
   });
     currentViews.shift();
     currentViews.push({time: times[0],drone: data.choice, lat: lat, long_: long_,
-      altitude:altitude[0], temp:temp[0], eta: eta[0]});
-    io.emit('ADD_VIEW', currentViews[currentViews.length - 1]); // broadcast the message everywhere
+      altitude:altitude[0], temp:temp[0], eta: eta[0], endLat:endLat[0], endLong:endLong[0],
+    startLat:startLat[0], startLong:startLong[0]});
+    io.emit('CHANGE_VIEW', currentViews[currentViews.length - 1]); // broadcast the message everywhere
   });
 });
