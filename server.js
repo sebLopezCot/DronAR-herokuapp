@@ -68,8 +68,8 @@ let drones = {
     "altitude": "300",
     "eta": "60",
     "timestamp": "1474167234",
-    "startLat": "41.8781",
-    "startLong": "-87.6298",
+    // "startLat": "41.8781",
+    // "startLong": "-87.6298",
     "endLat": "39.8781",
     "endLong": "-89.6298"
   }
