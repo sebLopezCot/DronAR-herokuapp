@@ -36,8 +36,8 @@ let server = app.listen(port, () => {
 let io = require('socket.io')(server);
 
 let currentViews = [
-  { type: 'skeleton',
-    x: 0, y: 0}
+  { type: 'skull',
+    x: 0, y: 0, rotate: 0, zoom: 1, rotate_rate: 0}
 ];
 
 io.on('connection', (socket) => {
@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
     });
   });
     currentViews.shift();
-    currentViews.push({type: data.view, x: 0, y: 0});
+    currentViews.push({type: data.choice, x: 0, y: 0});
     io.emit('ADD_VIEW', currentViews[currentViews.length - 1]); // broadcast the message everywhere
   });
 });
