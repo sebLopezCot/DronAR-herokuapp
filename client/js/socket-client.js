@@ -31,5 +31,5 @@ function updateSelection(choice, x, y, z, zoom, rotate, equation) {
 }
 
 function parseChoice(choice) {
-  return choice - 1;
+  return choice;
 }     
